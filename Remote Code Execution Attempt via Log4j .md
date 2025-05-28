@@ -6,7 +6,7 @@ In this lab, I documented the investigation of a malicious packet capture (PCAP)
 
 ##  Objective
 
-- Analyze a suspicious `.pcapng` file  
+- Analyze a suspicious `.pcapng` file  (Optional-Download : https://bit.ly/Log4jAttack)
 - Detect Log4j exploit attempts via JNDI injection  
 - Decode any hidden payloads  
 - Confirm if any callback/C2 behavior occurred  
@@ -171,4 +171,9 @@ It demonstrates a full-stack analysis pipeline suitable for my:
 ---
 
 * This personal lab project demonstrates my understanding of network protocols, threat patterns, and detection techniques used in real SOC environments.
+   
+🧠 Credit: Thanks to Brad Duncan for providing this sample file for educational use.
+
+* ⚠️ **Disclaimer**: This project is for educational and demonstration purposes only. The linked PCAP file is publicly shared by its original author (Brad Duncan) and does not contain real user data. Always analyze malicious traffic responsibly in a safe, isolated environment.
+
 
