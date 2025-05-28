@@ -38,6 +38,14 @@ In this lab, I documents the investigation of a malicious packet capture (PCAP) 
 - Loaded the `.pcapng` file into **Wireshark**
 - Since this was an offline PCAP, interface selection was irrelevant
 
+
+
+
+
+This shows suspicious traffic where JNDI strings are present in HTTP request payloads—an indicator of potential Log4j exploitation attempts.
+
+![Initial inspection: frame contains "jndi"](Screnshotslog4j/framecontainsjndi.png)
+
 ---
 
 ### Step 2: Applied Filter to Detect Log4j Exploits
@@ -57,9 +65,9 @@ In this lab, I documents the investigation of a malicious packet capture (PCAP) 
 
 ### Step 3: Isolate Callback Behavior
 
-**Filter Used:**
+This screenshot captures both the use of the composite filter and a specific request containing a Base64-encoded command in the `User-Agent` header.
 
-(ip contains "jndi") or (tcp.flags == 0x002 and ip.src == 198.71.247.91)
+![Callback filter applied in Wireshark](Screnshotslog4j/check4C2.png)
 
 
 **Goal:** Identify callback attempts to attacker-controlled servers (C2).
