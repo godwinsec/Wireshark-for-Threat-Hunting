@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this lab, I documents the investigation of a malicious packet capture (PCAP) containing a real-world Log4j (Log4Shell) exploit attempt. The objective was to detect signs of remote code execution (RCE), identify Indicators of Compromise (IOCs), and validate attacker infrastructure using open-source tools. This project demonstrates skills in threat hunting, packet analysis, payload decoding, and threat intelligence.
+In this lab, I documented the investigation of a malicious packet capture (PCAP) containing a real-world Log4j (Log4Shell) exploit attempt. The objective was to detect signs of remote code execution (RCE), identify Indicators of Compromise (IOCs), and validate attacker infrastructure using open-source tools. This project demonstrates skills in threat hunting, packet analysis, payload decoding, and threat intelligence.
 
 ##  Objective
 
