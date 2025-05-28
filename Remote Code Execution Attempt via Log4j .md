@@ -67,7 +67,7 @@ This shows suspicious traffic where JNDI strings are present in HTTP request pay
 
 This screenshot captures both the use of the composite filter and a specific request containing a Base64-encoded command in the `User-Agent` header.
 
-![Callback filter applied in Wireshark](Screnshotslog4j/check4C2.png)
+![Callback filter applied in Wireshark](Screnshotslog4j/checkC2.png)
 
 
 **Goal:** Identify callback attempts to attacker-controlled servers (C2).
