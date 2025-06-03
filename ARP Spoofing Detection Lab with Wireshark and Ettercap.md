@@ -47,8 +47,13 @@ This hands-on exercise is part of my ongoing practical training toward becoming 
 ```
 sudo sysctl -w net.ipv4.ip_forward=1
 ```
+![Enable IP Forwarding](Screnshotslog4j/Screenshot2025-06-03100754.png)
 
-This allows Kali to forward packets between the victim and gateway — essential for completing the MiTM.
+
+As shown in the screenshot, the command was executed successfully, and the system confirms:
+net.ipv4.ip_forward = 1
+
+This setting is critical for completing the Man-in-the-Middle (MiTM) attack, as it allows Kali to act as a transparent bridge, intercepting and forwarding packets between both targets. Without this, the attack would break normal communication between the devices — making the MiTM obvious and ineffective.
 
 ## Launch Ettercap via ClI or on the search bar and Configure Targets
 
