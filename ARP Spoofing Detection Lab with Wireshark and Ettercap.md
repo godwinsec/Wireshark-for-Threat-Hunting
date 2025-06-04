@@ -200,6 +200,20 @@ The results, shown indicate:
 
 This duplication occurs because **both the legitimate gateway and the attacker (Kali)** are forwarding packets. It’s a clear indicator that the attacker has placed themselves **in the communication path** — successfully executing a **Man-in-the-Middle (MiTM)** position through ARP spoofing.
 
+## Is a duplicate ICMP response common in a MiTM attack?
+
+Yes — duplicate ping replies are a known side-effect of an ARP spoofing-based Man-in-the-Middle (MiTM) attack, especially when the attacker doesn't fully block or filter traffic between the victim and the real gateway.
+
+Here’s what typically happens:
+
+- The victim sends a ping.
+
+- Both the **real gateway** and the **attacker (Kali)** believe they should respond or route the traffic.
+
+- Because of this, the victim receives two replies for one ping, and the system flags the second one as (DUP!).
+
+This is not **always present**, but when it happens, it’s a **strong red flag** for MiTM activity.
+
 
 # Conclusion 
 
