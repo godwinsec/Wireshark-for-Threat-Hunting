@@ -181,7 +181,7 @@ In the initial lab setup, the gateway IP was `192.168.7.150`. However, after **r
 
 This behavior is expected in environments using **DHCP**, where IP addresses are dynamically assigned and may change after system reboots or lease expiration.
 
-Despite the IP address change, the original **MAC address of the gateway remained consistent**: `46:e3:c8:27:3b:4d` although, The gateway IP 192.168.177.58 is now associated with the attacker’s MAC address 08:00:27:90:c4:45. This is a key reason why **ARP spoofing remains effective** — because devices trust MAC-to-IP mappings, and spoofing focuses on hijacking that trust at the MAC level.
+Despite the IP address change, the original **MAC address of the gateway remained consistent**: `46:e3:c8:27:3b:4d` although, the gateway IP 192.168.177.58 is now associated with the attacker’s MAC address 08:00:27:90:c4:45. This is a key reason why **ARP spoofing remains effective** — because devices trust MAC-to-IP mappings, and spoofing focuses on hijacking that trust at the MAC level.
 
 As long as the MAC address of the target remains unchanged, the spoofing technique and its results stay valid. The only necessary adjustment is to reflect the updated IP address in the screenshots and analysis.
 
@@ -193,7 +193,7 @@ To verify the success of the ARP spoofing attack, I performed a ping test to an 
 
 ![Duplicate Ping Replies](Screnshotslog4j/Screenshot%20from%202025-05-30%2019-20-30.png)
 
-The results, shown below, indicate:
+The results, shown indicate:
 - Normal ICMP replies from `142.250.203.100`
 - Multiple replies per sequence number marked with `(DUP!)`, meaning duplicate responses were received
 - Final summary: `9 packets transmitted, 9 received, +11 duplicates`
