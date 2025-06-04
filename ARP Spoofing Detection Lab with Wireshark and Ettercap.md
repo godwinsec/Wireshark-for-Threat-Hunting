@@ -171,7 +171,21 @@ Such duplicate IP detection is a powerful signal for threat hunters and SOC anal
 
 
 
-After attack: Ubuntu sees attacker's MAC for Gateway IP:
+## After attack: Ubuntu sees attacker's MAC for Gateway IP:
+
+![After the spoof attack](Screnshotslog4j/Screenshotfrom2025-06-0410-45-05.png)
+
+### Note on Gateway IP Changes
+
+In the initial lab setup, the gateway IP was `192.168.7.150`. However, after **restarting the lab environment a few days later**, the gateway IP had changed to `192.168.177.58`.
+
+This behavior is expected in environments using **DHCP**, where IP addresses are dynamically assigned and may change after system reboots or lease expiration.
+
+Despite the IP address change, the **MAC address of the gateway remained consistent**: `46:e3:c8:27:3b:4d`. This is a key reason why **ARP spoofing remains effective** — because devices trust MAC-to-IP mappings, and spoofing focuses on hijacking that trust at the MAC level.
+
+As long as the MAC address of the target remains unchanged, the spoofing technique and its results stay valid. The only necessary adjustment is to reflect the updated IP address in the screenshots and analysis.
+
+
 
 
 
