@@ -36,7 +36,6 @@ Before executing the ARP spoofing attack, I verified the current ARP table and i
 
 ```
 arp -a
-ifconfig
 ```
 
 ![Before the spoof attack](Screnshotslog4j/Screenshot%20from%202025-05-30%2017-30-30.png)
@@ -176,11 +175,6 @@ After attack: Ubuntu sees attacker's MAC for Gateway IP:
 
 
 
-
-## Wireshark Detected a Conflict
-![Duplicate use of 192.168.7.150 detected](addScrenshotfolderforthisproject/addDuplicatephoto)
-
-This happens because both Kali and the real gateway claim to own the same IP address, creating a classic ARP conflict.
 
 ## Duplicate Ping Replies from Ubuntu
 ![ Duplicate Ping Replies ](addScrenshotfolderforthisproject/DuplicatePingRepliesscreensho)
