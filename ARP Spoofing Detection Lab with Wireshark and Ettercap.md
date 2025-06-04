@@ -1,4 +1,4 @@
-#  ARP Spoofing Detection Lab using Wireshark & Ettercap ( Documentation of this project ongoing)
+#  ARP Spoofing Detection Lab using Wireshark & Ettercap
 
 
 
@@ -173,11 +173,13 @@ Such duplicate IP detection is a powerful signal for threat hunters and SOC anal
 
 ## After attack: Ubuntu sees attacker's MAC for Gateway IP:
 
-![After the spoof attack](Screnshotslog4j/Screenshotfrom2025-06-0410-45-05.png)
+![After the spoof attack](Screnshotslog4j/Screenshot%20from%202025-06-04%2010-45-05.png)
 
 ### Note on Gateway IP Changes
 
 In the initial lab setup, the gateway IP was `192.168.7.150`. However, after **restarting the lab environment a few days later**, the gateway IP had changed to `192.168.177.58`.
+
+The gateway IP 192.168.177.58 is now associated with the attacker’s MAC address 08:00:27:90:c4:45.
 
 This behavior is expected in environments using **DHCP**, where IP addresses are dynamically assigned and may change after system reboots or lease expiration.
 
@@ -187,16 +189,19 @@ As long as the MAC address of the target remains unchanged, the spoofing techniq
 
 
 
+## Duplicate Ping Replies
 
+To verify the success of the ARP spoofing attack, I performed a ping test to an external host (`www.google.com`) from the victim machine.
 
+![Duplicate Ping Replies](Screnshotslog4j/Screenshot%20from%202025-05-30%2019-20-30.png)
 
-## Duplicate Ping Replies from Ubuntu
-![ Duplicate Ping Replies ](addScrenshotfolderforthisproject/DuplicatePingRepliesscreensho)
+The results, shown below, indicate:
+- Normal ICMP replies from `142.250.203.100`
+- Multiple replies per sequence number marked with `(DUP!)`, meaning duplicate responses were received
+- Final summary: `9 packets transmitted, 9 received, +11 duplicates`
 
-This indicates that both the gateway and Kali are forwarding packets , confirming that the attacker is in the communication path.
+This duplication occurs because **both the legitimate gateway and the attacker (Kali)** are forwarding packets. It’s a clear indicator that the attacker has placed themselves **in the communication path** — successfully executing a **Man-in-the-Middle (MiTM)** position through ARP spoofing.
 
-## MAC Table Poisoned
-Ubuntu now believes that Kali's MAC belongs to the gateway. This proves that the attack was effective, and that the victim system is now exposed to interception.
 
 # Conclusion 
 
