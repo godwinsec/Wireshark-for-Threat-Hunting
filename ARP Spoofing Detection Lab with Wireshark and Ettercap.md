@@ -179,11 +179,9 @@ Such duplicate IP detection is a powerful signal for threat hunters and SOC anal
 
 In the initial lab setup, the gateway IP was `192.168.7.150`. However, after **restarting the lab environment a few days later**, the gateway IP had changed to `192.168.177.58`.
 
-The gateway IP 192.168.177.58 is now associated with the attacker’s MAC address 08:00:27:90:c4:45.
-
 This behavior is expected in environments using **DHCP**, where IP addresses are dynamically assigned and may change after system reboots or lease expiration.
 
-Despite the IP address change, the **MAC address of the gateway remained consistent**: `46:e3:c8:27:3b:4d`. This is a key reason why **ARP spoofing remains effective** — because devices trust MAC-to-IP mappings, and spoofing focuses on hijacking that trust at the MAC level.
+Despite the IP address change, the original **MAC address of the gateway remained consistent**: `46:e3:c8:27:3b:4d` although, The gateway IP 192.168.177.58 is now associated with the attacker’s MAC address 08:00:27:90:c4:45. This is a key reason why **ARP spoofing remains effective** — because devices trust MAC-to-IP mappings, and spoofing focuses on hijacking that trust at the MAC level.
 
 As long as the MAC address of the target remains unchanged, the spoofing technique and its results stay valid. The only necessary adjustment is to reflect the updated IP address in the screenshots and analysis.
 
